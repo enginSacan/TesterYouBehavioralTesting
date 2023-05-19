@@ -6,29 +6,30 @@ Feature:  User can do following actions for pet
 
   For each actıon user needs to have an authentıcation from the system.
 
-  Background:
-    Given I have an authentication for application
+#  Background:
+#    Given I have an authentication for application
 
   Scenario Outline: Add a new pet to the pet store
-    Given User has a pet with the following details:
-      | name   | type   | status   |
-      | <name> | <type> | <status> |
-    When User add the pet to the store
+    When User added a pet with the following details:
+      | id    | name   | type   | status   |
+      | <id> | <name> | <type> | <status> |
     Then Store should return response with the following details:
-      | name   | type   | status   |
-      | <name> | <type> | <status> |
+      | id     | name   | type   | status   |
+      | <id> | <name> | <type> | <status> |
     Examples:
-      | name   | type | status    |
-      | Fluffy | Dog  | Available |
+      | id      | name   | type | status    |
+      | 999999 | HawHaw | Dog  | Available |
+      | 999998 | Mieaw  | Cat  | Available |
 
   Scenario Outline: Delete the added pet from the pet store
     Given User has the added pet information with following details:
-      | pet id   |
-      | <pet id> |
+      | id    | name   | type   | status   |
+      | <id> | <name> | <type> | <status> |
     When User removes the pet from the store
-    Then Store should return response with the following details:
-      | pet id   | message   |
-      | <pet id> | <message> |
+    Then Store should delete pet with the following details:
+      | id   | message   |
+      | <id> | <message> |
     Examples:
-      | pet id | message |
-      | 0112   | test    |
+      | id     | name   | type | status    | message |
+      | 111111 | HawHaw | Dog  | Available | test    |
+      | 111112 | Mieaw  | Cat  | Available | test    |

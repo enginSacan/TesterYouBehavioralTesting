@@ -5,5 +5,8 @@ import lombok.NoArgsConstructor;
 
 @NoArgsConstructor(access= AccessLevel.NONE)
 public class PropertyNames {
-    public static final String REST_API_BOARD = "rest.api.board.url";
+    public static final String REST_BASE_ENDPOINT = "rest.base.endpoint";
+    public static final String REST_USERNAME = "rest.user";
+    public static final String REST_PASSWORD = "rest.password";
+    public static String TOKEN ="";
 }
