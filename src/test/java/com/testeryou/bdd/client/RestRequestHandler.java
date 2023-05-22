@@ -61,6 +61,7 @@ public class RestRequestHandler {
         responseOptions = RestAssured
                 .given()
                 .log().all(true)
+                .header("Accept","application/json")
                 .get();
     }
     public void getWithToken (String requestUrl) {
@@ -86,6 +87,15 @@ public class RestRequestHandler {
                 .log().all(true)
                 .put();
     }
+    public void put (String requestUrl, String requestContent) {
+        RestAssured.baseURI = requestUrl;
+        responseOptions = RestAssured
+                .given()
+                .log().all(true)
+                .headers(getDefaultHeader())
+                .body(requestContent)
+                .put();
+    }
     public void delete (String requestUrl, Map<String, String> params) {
         RestAssured.baseURI = requestUrl;
         responseOptions = RestAssured
@@ -94,12 +104,11 @@ public class RestRequestHandler {
                 .queryParams(params)
                 .delete();
     }
-    public void deleteWithToken (String requestUrl, Map<String, String> params) {
+    public void deleteWithToken (String requestUrl) {
         RestAssured.baseURI = requestUrl;
         responseOptions = RestAssured
                 .given()
                 .log().all(true)
-                .queryParams(params)
                 .headers(getHeadersWithToken())
                 .delete();
     }
@@ -114,6 +123,7 @@ public class RestRequestHandler {
     private Map<String, String> getHeadersWithToken() {
         Map<String,String> headers = new HashMap<>();
         headers.put("Content-Type", "application/json; charset=utf-8");
+        headers.put("Accept","application/json");
         headers.put("api_key", TOKEN);
         return headers;
     }

@@ -7,6 +7,7 @@ import io.cucumber.datatable.DataTable;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+import io.restassured.internal.http.HttpResponseException;
 import org.junit.jupiter.api.function.Executable;
 
 
@@ -38,8 +39,17 @@ public class CrudPetSteps {
             PetHandler.getPet(id);
             String name = Objects.requireNonNull(verificationField.get("name"));
             String type = Objects.requireNonNull(verificationField.get("type"));
-            String status = Objects.requireNonNull(verificationField.get("status"));
-            assertions.add( () -> verifyFields(id,name,type,status));
+            String status = verificationField.get("status");
+            String updatedStatus = verificationField.get("updated status");
+            if (updatedStatus!= null) {
+                assertions.add( () -> assertEquals(updatedStatus,PetHandler.getPetResponse().getStatus()));
+            }
+            if (status != null) {
+                assertions.add( () -> assertEquals(status,PetHandler.getPetResponse().getStatus()));
+            }
+            assertions.add( () -> assertEquals(Integer.parseInt(id),PetHandler.getPetResponse().getId()));
+            assertions.add( () -> assertEquals(name,PetHandler.getPetResponse().getName()));
+            assertions.add( () -> assertEquals(type,PetHandler.getPetResponse().getCategory().getName()));
         });
        assertAll("There were mismatch in the fields",assertions);
     }
@@ -51,23 +61,19 @@ public class CrudPetSteps {
     public void userRemovesThePetFromTheStore() {
         PetHandler.removePet(String.valueOf(PetHandler.getPetResponse().getId()));
     }
-    public static void verifyFields(String id, String name, String type, String status) {
-        assertEquals(Integer.parseInt(id),PetHandler.getPetResponse().getId());
-        assertEquals(name,PetHandler.getPetResponse().getName());
-        assertEquals(type,PetHandler.getPetResponse().getCategory().getName());
-        assertEquals(status,PetHandler.getPetResponse().getStatus());
-    }
-
     @Then("Store should delete pet with the following details:")
     public void storeShouldDeletePetWithTheFollowingDetails(DataTable table) {
         List<Executable> assertions = new ArrayList<>();
 
         table.asMaps().forEach( verificationField -> {
             String id = verificationField.get("id");
-            PetHandler.getPet(id);
-            assertions.add(() -> assertThrows(NullPointerException.class,() -> PetHandler.getPetResponse().getId()));
+           assertions.add(() -> assertThrows(HttpResponseException.class,() -> PetHandler.getPet(id)));
         });
 
         assertAll("There should not be any pet", assertions);
+    }
+    @When("User updated a pet with the following details:")
+    public void userUpdatedAPetWithTheFollowingDetails(DataTable table) {
+        PetHandler.updatePet(table);
     }
 }

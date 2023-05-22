@@ -13,7 +13,7 @@ import static io.cucumber.core.options.Constants.*;
 @IncludeEngines("cucumber")
 @SelectClasspathResource("com.testeryou.bdd.steps")
 @ConfigurationParameter(key = PLUGIN_PROPERTY_NAME,value = "pretty")
-@ConfigurationParameter(key = PLUGIN_PROPERTY_NAME,value = "json:target/cucumber-report/cucumber.json")
+@ConfigurationParameter(key = PLUGIN_PROPERTY_NAME,value = "json:target/cucumber-report/cucumber.json, html:target/cucumber-report/cucumber.html")
 @ConfigurationParameter(key = GLUE_PROPERTY_NAME, value = "com.testeryou.bdd.steps")
 @ConfigurationParameter(key = FEATURES_PROPERTY_NAME, value = "src/test/features")
 public class CucumberTest {
